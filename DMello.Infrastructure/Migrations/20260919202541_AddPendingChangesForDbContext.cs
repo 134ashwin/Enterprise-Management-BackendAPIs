@@ -10,7 +10,7 @@ namespace DMello.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // ✅ Safe execution: Checks sys.indexes before attempting drop
+            //  Safe execution: Checks sys.indexes before attempting drop
             migrationBuilder.Sql(@"
         IF EXISTS (
             SELECT 1 
