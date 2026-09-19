@@ -2,6 +2,7 @@
 using DMello.Application.Common.Interfaces;
 using DMello.Domain.Interfaces;
 using DMello.Domain.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -11,11 +12,13 @@ namespace DMello.Application.Auth
     {
         private readonly IUserRepository _userRepo;
         private readonly IJwtService _jwtService;
+        private readonly ILogger _logger;
 
-        public AuthService(IUserRepository userRepo, IJwtService jwtService)
+        public AuthService(IUserRepository userRepo, IJwtService jwtService, ILogger logger)
         {
             _userRepo = userRepo;
             _jwtService = jwtService;
+            _logger = logger;
         }
 
         public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)
@@ -23,6 +26,7 @@ namespace DMello.Application.Auth
             var user = await _userRepo.GetByEmailAsync(request.Email);
             if (user == null)
             {
+                _logger.LogWarning("LOGIN FAILED: User with email {Email} was not found in DB.", request.Email);
                 return null; // Email not found
             }
 
@@ -30,6 +34,7 @@ namespace DMello.Application.Auth
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
+                _logger.LogWarning("LOGIN FAILED: Password verification failed for user {Email}.", request.Email);
                 return null; // Wrong password
             }
 
@@ -56,11 +61,6 @@ namespace DMello.Application.Auth
                 return null; // Invalid or expired refresh token
             }
 
-            //bool isValid = BCrypt.Net.BCrypt.Verify(incomingRawRefreshTokenSentByBrowser, user.RefreshToken);
-            //if (!isValid)
-            //{
-            //    return null; // Stolen or manipulated token
-            //}
 
             // 3. Generate NEW Access Token AND NEW Refresh Token (Token Rotation)
             var newAccessToken = _jwtService.GenerateToken(user);

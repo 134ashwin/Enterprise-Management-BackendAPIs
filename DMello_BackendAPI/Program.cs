@@ -60,6 +60,12 @@ builder.Services.AddAuthentication(options =>
 #endregion
 
 
+#region// 1. Configure Logging to stdout for Azure App Service
+//Why it exists: Sends internal app logs, EF Core SQL queries, and unhandled exceptions to the standard output console.
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); // Outputs errors directly to Azure Log Stream
+builder.Logging.AddDebug();
+#endregion
 
 // Add services to the container.
 builder.Services.AddControllers();
