@@ -71,7 +71,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "https://green-cliff-08809cc1e.2.azurestaticapps.net")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // <--- CRITICAL: Allows browser to send HttpOnly cookies
@@ -105,5 +105,22 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+#region // Automatically apply pending EF Core migrations on application startup
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>(); // Replace with your DbContext class name
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database schema.");
+    }
+}
+#endregion
 
 app.Run();

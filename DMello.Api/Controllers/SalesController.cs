@@ -1,14 +1,15 @@
 ﻿namespace DMello.Api.Controllers;
 
-using ExcelDataReader;
 using DMello.Application.Sales.DTOs;
 using DMello.Domain.Models;
 using DMello.Infrastructure.Data;
+using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using static System.Net.WebRequestMethods;
 
 //[Authorize]
 [ApiController]
@@ -23,15 +24,34 @@ public class SalesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetSalesOrders()
+    public async Task<IActionResult> GetSalesOrders([FromQuery]SalesOrderFilterDto filter)
     {
-        var sales = await _context.SalesOrders
-            .AsNoTracking()
+        // 1. Build deferred query without executing SQL yet
+        var query = _context.SalesOrders.AsNoTracking().AsQueryable();
+
+        // 2. Apply dynamic filters
+        //if (!string.IsNullOrWhiteSpace(filter.OrderNo))
+        //{
+        //    query = query.Where(s => s.OrderNo.Contains(filter.OrderNo.Trim()));
+        //}
+
+        //if (filter.Date.HasValue)
+        //{
+        //    query = query.Where(s => s.OrderDate.Date == filter.Date.Value.Date);
+        //}
+
+        // 3. Get total filtered count for pagination calculations
+        var totalCount = await query.CountAsync();
+
+        // 4. Perform database-level pagination (OFFSET & FETCH NEXT)
+        var items = await query
             .OrderByDescending(s => s.OrderDate)
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
             .Select(s => new SalesOrderResponseDto
             {
                 Id = s.Id,
-                OrderDate = s.OrderDate.ToString("dd/MM/yyyy"), // D/M/Y format for UI
+                OrderDate = s.OrderDate.ToString("dd/MM/yyyy"),
                 OrderNo = s.OrderNo,
                 MainSku = s.MainSku,
                 SubSku = s.SubSku,
@@ -41,10 +61,17 @@ public class SalesController : ControllerBase
             })
             .ToListAsync();
 
-        return Ok(sales);
+        // 5. Return paginated wrapper payload
+        return Ok(new PagedResultDto<SalesOrderResponseDto>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            PageNumber = filter.PageNumber,
+            PageSize = filter.PageSize
+        });
     }
 
-    [HttpPost]
+    [HttpPost("create-sales")]
     public async Task<IActionResult> CreateSalesOrder([FromBody] CreateSalesOrderDto dto)
     {
         var salesOrder = new SalesOrdersModel

@@ -45,7 +45,6 @@ namespace DMello.Application.Auth
             // 3. Return DTO with both parameters
             return new LoginResponseDto(accessToken, NewrawRefreshToken);
         }
-
         public async Task<LoginResponseDto?> RefreshTokenAsync(string incomingRawRefreshTokenSentByBrowser) // sent via HttpONly Cookiee
         {
             // 1. Finding a user by RefreshToken in database, so that we can delete existing refresh token and generate new one after few days
