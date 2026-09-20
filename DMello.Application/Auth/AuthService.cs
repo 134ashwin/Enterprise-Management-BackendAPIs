@@ -12,9 +12,9 @@ namespace DMello.Application.Auth
     {
         private readonly IUserRepository _userRepo;
         private readonly IJwtService _jwtService;
-        private readonly ILogger _logger;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IUserRepository userRepo, IJwtService jwtService, ILogger logger)
+        public AuthService(IUserRepository userRepo, IJwtService jwtService, ILogger<AuthService> logger)
         {
             _userRepo = userRepo;
             _jwtService = jwtService;

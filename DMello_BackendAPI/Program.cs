@@ -8,6 +8,7 @@ using DMello.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
@@ -28,11 +29,15 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // 3. AuthService (Business logic layer)
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddLogging();
 #endregion
 
 // Bind appsettings.json "Jwt" section directly to JwtOptions class
 builder.Services.Configure<JwtOptions>
     (builder.Configuration.GetSection(JwtOptions.SectionName));
+
+
 
 #region // Added necessary JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -86,6 +91,7 @@ builder.Services.AddCors(options =>
 #endregion
 
 
+
 var app = builder.Build();
 
 
@@ -101,6 +107,42 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "v1");
         options.RoutePrefix = "swagger"; // Opens UI at /swagger
     });
+}
+#endregion
+
+#region // Run migrations and seeding inside a guarded try-catch block
+
+//Why it exists: Isolates database startup operations (migrations/seeding) inside a scoped try-catch block.
+//What problem it solves: Prevents a single database schema constraint violation from causing a total HTTP 500 App Service crash.
+//How it works: Catches DbUpdateException or SqlException during app startup, logs the precise stack trace via ILogger, and lets the Web API process continue serving requests.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+
+        // 1. Apply pending EF Core migrations safely
+        logger.LogInformation("Applying EF Core migrations...");
+        context.Database.Migrate();
+
+        // 2. Safe seed check for testing user
+        var user = context.Users.FirstOrDefault(u => u.Email == "testing@gmail.com");
+        if (user != null)
+        {
+            logger.LogInformation("Updating password hash for testing@gmail.com...");
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234");
+            context.SaveChanges();
+            logger.LogInformation("Password hash updated successfully!");
+        }
+    }
+    catch (Exception ex)
+    {
+        // Log the exact database error without killing the API process
+        logger.LogError(ex, "DATABASE STARTUP ERROR: Migration or seeding failed.");
+    }
 }
 #endregion
 
