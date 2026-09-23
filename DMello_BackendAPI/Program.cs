@@ -145,13 +145,11 @@ using (var scope = app.Services.CreateScope())
     }
 }
 #endregion
-
+app.UseCors("AllowAngular");
 app.UseRouting();
 //app.UseHttpsRedirection();
-app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 #region // Automatically apply pending EF Core migrations on application startup

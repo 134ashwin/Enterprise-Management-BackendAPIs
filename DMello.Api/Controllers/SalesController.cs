@@ -29,17 +29,6 @@ public class SalesController : ControllerBase
         // 1. Build deferred query without executing SQL yet
         var query = _context.SalesOrders.AsNoTracking().AsQueryable();
 
-        // 2. Apply dynamic filters
-        //if (!string.IsNullOrWhiteSpace(filter.OrderNo))
-        //{
-        //    query = query.Where(s => s.OrderNo.Contains(filter.OrderNo.Trim()));
-        //}
-
-        //if (filter.Date.HasValue)
-        //{
-        //    query = query.Where(s => s.OrderDate.Date == filter.Date.Value.Date);
-        //}
-
         // 3. Get total filtered count for pagination calculations
         var totalCount = await query.CountAsync();
 
@@ -122,13 +111,6 @@ public class SalesController : ControllerBase
                 {
                     var salesOrder = new SalesOrdersModel
                     {
-                        //OrderDate = DateTime.TryParse(row["Date_d_m_y"]?.ToString(), out var dt) ? dt : DateTime.UtcNow,
-                        //OrderNo = row["Order No"]?.ToString() ?? string.Empty,
-                        //MainSku = row["Main SKU"]?.ToString() ?? string.Empty,
-                        //SubSku = row["Sub SKU"]?.ToString() ?? string.Empty,
-                        //Size = row["Size"]?.ToString() ?? string.Empty,
-                        //Customer = row["Customer"]?.ToString() ?? string.Empty,
-                        //Description = row["Description"]?.ToString() ?? string.Empty
                         OrderDate = DateTime.TryParse(row[0]?.ToString(), out var dt) ? dt : DateTime.UtcNow, // Column A
                         OrderNo = row[1]?.ToString() ?? string.Empty,                                          // Column B
                         MainSku = row[2]?.ToString() ?? string.Empty,                                          // Column C
