@@ -4,6 +4,7 @@ using DMello.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMello.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260926102533_ChangedProductRelatedFourModels")]
+    partial class ChangedProductRelatedFourModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,6 +102,9 @@ namespace DMello.Infrastructure.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("LocationCodeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uniqueidentifier");
 
@@ -118,7 +124,7 @@ namespace DMello.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("LocationCodeId");
 
                     b.HasIndex("ProductSkuId");
 
@@ -193,11 +199,9 @@ namespace DMello.Infrastructure.Migrations
 
             modelBuilder.Entity("DMello.Domain.Models.SubSku", b =>
                 {
-                    b.HasOne("DMello.Domain.Models.WarehouseLocation", "Location")
+                    b.HasOne("DMello.Domain.Models.WarehouseLocation", "LocationCode")
                         .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LocationCodeId");
 
                     b.HasOne("DMello.Domain.Models.ProductSku", "ProductSku")
                         .WithMany("SubSkus")
@@ -211,7 +215,7 @@ namespace DMello.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Location");
+                    b.Navigation("LocationCode");
 
                     b.Navigation("ProductSku");
 

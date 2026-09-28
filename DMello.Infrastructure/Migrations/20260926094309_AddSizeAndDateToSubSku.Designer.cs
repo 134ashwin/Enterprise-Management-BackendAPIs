@@ -4,6 +4,7 @@ using DMello.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMello.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260926094309_AddSizeAndDateToSubSku")]
+    partial class AddSizeAndDateToSubSku
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,10 +102,17 @@ namespace DMello.Infrastructure.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductSkuId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RackCodeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Size")
@@ -116,11 +126,15 @@ namespace DMello.Infrastructure.Migrations
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
-
                     b.HasIndex("ProductSkuId");
+
+                    b.HasIndex("RackCodeId");
 
                     b.HasIndex("SupplierId");
 
@@ -182,7 +196,7 @@ namespace DMello.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("LocationCode")
+                    b.Property<string>("RackCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -193,17 +207,15 @@ namespace DMello.Infrastructure.Migrations
 
             modelBuilder.Entity("DMello.Domain.Models.SubSku", b =>
                 {
-                    b.HasOne("DMello.Domain.Models.WarehouseLocation", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DMello.Domain.Models.ProductSku", "ProductSku")
                         .WithMany("SubSkus")
                         .HasForeignKey("ProductSkuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DMello.Domain.Models.WarehouseLocation", "RackCode")
+                        .WithMany()
+                        .HasForeignKey("RackCodeId");
 
                     b.HasOne("DMello.Domain.Models.Supplier", "Supplier")
                         .WithMany()
@@ -211,9 +223,9 @@ namespace DMello.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Location");
-
                     b.Navigation("ProductSku");
+
+                    b.Navigation("RackCode");
 
                     b.Navigation("Supplier");
                 });

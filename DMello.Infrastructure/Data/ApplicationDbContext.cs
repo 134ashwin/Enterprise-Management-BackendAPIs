@@ -19,6 +19,13 @@ namespace DMello.Infrastructure.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<SalesOrdersModel> SalesOrders => Set<SalesOrdersModel>();
 
+        #region All Dbsets for Products part containing supplier, Location, SubSku and ProductSku
+        public DbSet<ProductSku> ProductSkus { get; set; } = null!;
+        public DbSet<SubSku> SubSkus { get; set; } = null!;
+        public DbSet<Supplier> Suppliers { get; set; } = null!;
+        public DbSet<WarehouseLocation> WarehouseLocations { get; set; } = null!;
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

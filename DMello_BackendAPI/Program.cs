@@ -1,6 +1,7 @@
 using DMello.Application.Auth;
 using DMello.Application.Common.Interfaces;
 using DMello.Application.Common.Options;
+using DMello.Application.InventoryProducts;
 using DMello.Domain.Interfaces;
 using DMello.Infrastructure.Authentication;
 using DMello.Infrastructure.Data;
@@ -21,22 +22,23 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // 2. Registering ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
-
 builder.Services.AddScoped<IJwtService, JwtService>();
-
-// 2. UserRepository (Data access layer)
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-
 // 3. AuthService (Business logic layer)
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddLogging();
+#endregion
+
+#region All Registered Repositories for Db Connections 
+builder.Services.AddScoped<IInventoryRepository, InventoryProductRepository>();
+// 2. UserRepository (Data access layer)
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 #endregion
 
 // Bind appsettings.json "Jwt" section directly to JwtOptions class
 builder.Services.Configure<JwtOptions>
     (builder.Configuration.GetSection(JwtOptions.SectionName));
-
 
 
 #region // Added necessary JWT Authentication
