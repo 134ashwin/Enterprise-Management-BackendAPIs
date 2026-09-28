@@ -2,6 +2,7 @@ using DMello.Application.Auth;
 using DMello.Application.Common.Interfaces;
 using DMello.Application.Common.Options;
 using DMello.Application.InventoryProducts;
+using DMello.Application.Suppliers;
 using DMello.Domain.Interfaces;
 using DMello.Infrastructure.Authentication;
 using DMello.Infrastructure.Data;
@@ -26,6 +27,9 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 // 3. AuthService (Business logic layer)
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 
 builder.Services.AddLogging();
 #endregion

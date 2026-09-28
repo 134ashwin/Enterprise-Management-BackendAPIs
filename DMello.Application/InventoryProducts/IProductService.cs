@@ -11,5 +11,6 @@ namespace DMello.Application.InventoryProducts
     public interface IProductService
     {
         Task<List<ProductResponseDto>> GetProductsAsync(string? searchQuery = null);
+        Task<ProductResponseDto> CreateProductAsync(CreateProductRequestDto dto);
     }
 }

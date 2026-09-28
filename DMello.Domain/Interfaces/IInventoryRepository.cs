@@ -11,5 +11,7 @@ namespace DMello.Domain.Interfaces
     public interface IInventoryRepository
     {
         Task<List<ProductSku>> GetProductSkusWithDetailsAsync(string? searchQuery = null);
+        Task<ProductSku> CreateProductAsync(ProductSku productSku); //Now we add the CreateProductAsync method so when the Supplier page add a product with SupplierId, EF Core saves the relationship cleanly.
+        
     }
 }

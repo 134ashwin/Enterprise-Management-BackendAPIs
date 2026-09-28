@@ -23,7 +23,7 @@ namespace DMello.Domain.Models
         public Guid SupplierId { get; set; }
         public Supplier? Supplier { get; set; }
 
-        public Guid LocationId { get; set; }
+        //public Guid LocationId { get; set; }
         public WarehouseLocation? Location { get; set; }
 
         //Now Supplier and Location are seperate tables, so that we can prevent data duplicate, other supplier name and location will duplicate

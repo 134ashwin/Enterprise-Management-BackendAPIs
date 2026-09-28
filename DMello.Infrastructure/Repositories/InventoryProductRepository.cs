@@ -41,5 +41,12 @@ namespace DMello.Infrastructure.Repositories
 
             return await query.ToListAsync();
         }
+
+        public async Task<ProductSku> CreateProductAsync(ProductSku productSku) // Method data will be getted from Supplier
+        {
+            await _context.ProductSkus.AddAsync(productSku);
+            await _context.SaveChangesAsync();
+            return productSku;
+        }
     }
 }
