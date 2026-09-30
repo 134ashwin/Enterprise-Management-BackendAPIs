@@ -11,7 +11,7 @@ namespace DMello.Domain.Models
         // How it works: Belongs to a ProductSku via ProductSkuId foreign key and holds specific warehouse metadata.
         public Guid Id { get; set; } = Guid.NewGuid();
         public string SubSkuCode { get; set; } = string.Empty; // e.g., "HD-COTTON-01-L"
-        public string Size { get; set; } = string.Empty;       // e.g., "Large"
+        public string Qty { get; set; } = string.Empty;       // e.g., "Large"
         public string? ImageUrl { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 

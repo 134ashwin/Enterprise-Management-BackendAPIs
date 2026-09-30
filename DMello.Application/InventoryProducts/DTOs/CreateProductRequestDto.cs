@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DMello.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace DMello.Application.InventoryProducts.DTOs
 {
@@ -13,13 +15,13 @@ namespace DMello.Application.InventoryProducts.DTOs
 
         // SubSku / Variant fields
         public string SubSkuCode { get; set; } = string.Empty;
-        public string Size { get; set; } = string.Empty;
+        public string Qty { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
 
         // Foreign Keys linking to normalized master tables
         public string SupplierName { get; set; } = string.Empty;
         public string GSTNumber { get; set; } = string.Empty;
-
-        public string LocationCode { get; set; } = string.Empty;
+        
+        public string? LocationCode { get; set; }
     }
 }

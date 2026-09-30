@@ -8,7 +8,7 @@ namespace DMello.Application.InventoryProducts.DTOs
     {
         public Guid Id { get; set; }
         public string SubSku { get; set; } = string.Empty;
-        public string Size { get; set; } = string.Empty;
+        public string Qty { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
         public string Location { get; set; } = string.Empty;
         public string SupplierName { get; set; } = string.Empty;

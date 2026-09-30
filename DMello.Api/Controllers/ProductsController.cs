@@ -30,7 +30,7 @@ namespace DMello.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductResponseDto>> CreateProduct([FromBody] CreateProductRequestDto dto)
+        public async Task<ActionResult<ProductResponseDto>> CreateProduct(CreateProductRequestDto dto)
         {
             var result = await _productService.CreateProductAsync(dto);
             return Ok(result);

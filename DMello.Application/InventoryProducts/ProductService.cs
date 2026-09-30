@@ -36,7 +36,7 @@ namespace DMello.Application.InventoryProducts
                 {
                     Id = s.Id,
                     SubSku = s.SubSkuCode,
-                    Size = s.Size,
+                    Qty = s.Qty,
                     ImageUrl = s.ImageUrl,
                     // Access string property on Supplier object (with null check default)
                     SupplierName = s.Supplier?.Name ?? "N/A",
@@ -73,7 +73,7 @@ namespace DMello.Application.InventoryProducts
             new SubSku
             {
                 SubSkuCode = dto.SubSkuCode,
-                Size = dto.Size,
+                Qty = dto.Qty,
                 ImageUrl = dto.ImageUrl,
                 Supplier = newSupplier, // Foreign key passed from Supplier UI!
                 Location = newLocation,
@@ -98,7 +98,7 @@ namespace DMello.Application.InventoryProducts
                 {
                     Id = s.Id,
                     SubSku = s.SubSkuCode,
-                    Size = s.Size,
+                    Qty = s.Qty,
                     ImageUrl = s.ImageUrl,
                     SupplierName = newSupplier.Name ?? "N/A",
                     Location = s.Location?.LocationCode ?? "N/A",
