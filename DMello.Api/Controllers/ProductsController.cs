@@ -23,9 +23,9 @@ namespace DMello.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductResponseDto>>> GetProducts([FromQuery] string? query)
+        public async Task<ActionResult<List<ProductResponseDto>>> GetProducts()//[FromQuery] string? query
         {
-            var products = await _productService.GetProductsAsync(query);
+            var products = await _productService.GetProductsAsync();   //query
             return Ok(products);
         }
 

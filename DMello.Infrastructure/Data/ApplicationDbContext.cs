@@ -39,6 +39,11 @@ namespace DMello.Infrastructure.Data
                 entity.HasIndex(u => u.Email).IsUnique();
             });
 
+            modelBuilder.Entity<Supplier>(entity =>
+            {
+                entity.HasIndex(u => u.Name).IsUnique(); // Supplier can not be duplicate
+            });
+
             // Configure SalesOrder indexes and constraints
             modelBuilder.Entity<SalesOrdersModel>(entity =>
             {
