@@ -41,7 +41,7 @@ namespace DMello.Infrastructure.Data
 
             modelBuilder.Entity<Supplier>(entity =>
             {
-                entity.HasIndex(u => u.Name).IsUnique(); // Supplier can not be duplicate
+                entity.HasIndex(u => u.Name); // Supplier can not be duplicate
             });
 
             // Configure SalesOrder indexes and constraints
