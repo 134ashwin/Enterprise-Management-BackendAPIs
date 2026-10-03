@@ -30,15 +30,6 @@ namespace DMello.Infrastructure.Repositories
          .AsNoTracking()
          .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchQuery))
-            {
-                var search = searchQuery.Trim().ToLower();  //Clean up what user typed(remove extra spaces like " shirt "-> "shirt"
-
-                query = query.Where(p =>                  //Add a filter rule: Keep product if Sku OR MainSku contains the search word
-                    p.Sku.ToLower().Contains(search) ||
-                    p.MainSku.ToLower().Contains(search));
-            }
-
             return await query.ToListAsync();
         }
 
