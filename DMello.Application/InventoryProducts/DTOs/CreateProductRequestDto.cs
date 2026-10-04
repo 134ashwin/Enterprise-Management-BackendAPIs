@@ -8,7 +8,6 @@ namespace DMello.Application.InventoryProducts.DTOs
 {
     public class CreateProductRequestDto
     {
-        public string Sku { get; set; } = string.Empty;
         public string MainSku { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;

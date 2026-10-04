@@ -29,7 +29,6 @@ namespace DMello.Application.InventoryProducts
             return products.Select(p => new ProductResponseDto
             {
                 Id = p.Id,
-                Sku = p.Sku,
                 MainSku = p.MainSku,
                 IsExpanded = false,
                 SubSkus = p.SubSkus.Select(s => new SubSkuResponseDto
@@ -65,7 +64,6 @@ namespace DMello.Application.InventoryProducts
 
             var product = new ProductSku
             {
-                Sku = dto.Sku,
                 MainSku = dto.MainSku,
                 CreatedAt = DateTime.UtcNow,
                 SubSkus = new List<SubSku>
@@ -85,13 +83,12 @@ namespace DMello.Application.InventoryProducts
             await _inventoryRepository.CreateProductAsync(product);
 
             // Re-fetch created product with details to return full DTO
-            var createdProducts = await _inventoryRepository.GetProductSkusWithDetailsAsync(product.Sku);
+            var createdProducts = await _inventoryRepository.GetProductSkusWithDetailsAsync(product.MainSku);
             var created = createdProducts.First();
 
             return new ProductResponseDto
             {
                 Id = created.Id,
-                Sku = created.Sku,
                 MainSku = created.MainSku,
                 IsExpanded = false,
                 SubSkus = created.SubSkus.Select(s => new SubSkuResponseDto

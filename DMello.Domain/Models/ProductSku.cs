@@ -10,7 +10,6 @@ namespace DMello.Domain.Models
     public class ProductSku
     {
         public Guid Id { get; set; } = Guid.NewGuid();
-        public string Sku { get; set; } = string.Empty;     // e.g., "HD-COTTON-01" (Parent SKU)
         public string MainSku { get; set; } = string.Empty; // e.g., "HOODIE-MAIN"
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
