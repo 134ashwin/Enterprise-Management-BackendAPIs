@@ -1,8 +1,10 @@
 using DMello.Application.Auth;
 using DMello.Application.Common.Interfaces;
 using DMello.Application.Common.Options;
+using DMello.Application.Customers;
 using DMello.Application.InventoryProducts;
 using DMello.Application.Suppliers;
+using DMello.Application.Customers.Services;
 using DMello.Domain.Interfaces;
 using DMello.Infrastructure.Authentication;
 using DMello.Infrastructure.Data;
@@ -19,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-#region All Regisetered Service via DI
+#region All Regisetered Services
 // 2. Registering ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -30,6 +32,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddLogging();
 #endregion
@@ -38,6 +41,8 @@ builder.Services.AddLogging();
 builder.Services.AddScoped<IInventoryRepository, InventoryProductRepository>();
 // 2. UserRepository (Data access layer)
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<ICustomerOrderRepository, CustomerOrderRepository>();
 #endregion
 
 // Bind appsettings.json "Jwt" section directly to JwtOptions class
@@ -132,7 +137,7 @@ using (var scope = app.Services.CreateScope())
 
         // 1. Apply pending EF Core migrations safely
         logger.LogInformation("Applying EF Core migrations...");
-        context.Database.Migrate();
+         context.Database.Migrate();
 
         // 2. Safe seed check for testing user
         var user = context.Users.FirstOrDefault(u => u.Email == "testing@gmail.com");

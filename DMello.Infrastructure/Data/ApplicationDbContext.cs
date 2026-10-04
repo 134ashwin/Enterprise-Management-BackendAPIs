@@ -24,6 +24,8 @@ namespace DMello.Infrastructure.Data
         public DbSet<SubSku> SubSkus { get; set; } = null!;
         public DbSet<Supplier> Suppliers { get; set; } = null!;
         public DbSet<WarehouseLocation> WarehouseLocations { get; set; } = null!;
+
+        public DbSet<CustomerModel> CustomerOrders => Set<CustomerModel>();
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
