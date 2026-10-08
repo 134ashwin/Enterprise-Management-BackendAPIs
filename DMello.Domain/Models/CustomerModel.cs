@@ -28,7 +28,7 @@ namespace DMello.Domain.Models
         [MaxLength(100)]
         public string Customer { get; set; } = string.Empty;
 
-        [MaxLength(500)]
+        //[MaxLength(500)]
         public string? Description { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

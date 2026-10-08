@@ -30,6 +30,7 @@ namespace DMello.Application.Auth
                 return null; // Email not found
             }
 
+         
             // Verify password hash
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
             if (!isPasswordValid)

@@ -93,7 +93,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://green-cliff-08809cc1e.2.azurestaticapps.net")
+        policy.WithOrigins("http://localhost:4200", "https://green-cliff-08809cc1e.2.azurestaticapps.net", "http://localhost:8080")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // <--- CRITICAL: Allows browser to send HttpOnly cookies

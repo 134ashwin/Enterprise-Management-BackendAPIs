@@ -18,9 +18,7 @@ namespace DMello.Domain.Models
         public string MainSku { get; set; } = string.Empty;  // Main SKU
         public string SubSku { get; set; } = string.Empty;   // Sub SKU
         public string Size { get; set; } = string.Empty;     // Size
-        public string Customer { get; set; } = string.Empty; // Customer
-        public string Description { get; set; } = string.Empty; // Description
+        public string Customer { get; set; } = string.Empty; // CustomerName
+        public string? Description { get; set; } = string.Empty; // Description
     }
 }
-
-
