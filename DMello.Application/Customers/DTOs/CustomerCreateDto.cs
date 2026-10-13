@@ -20,8 +20,8 @@ namespace DMello.Application.Customers.DTOs
         [StringLength(50, ErrorMessage = "GST Number cannot exceed 50 characters")]
         public string? GstNumber { get; set; }
 
-        [Required]
-        public string address { get; set; }
+        [Required(ErrorMessage = "Address is required")]
+        public string address { get; set; } = string.Empty;
 
         public string? description { get; set; }
     }

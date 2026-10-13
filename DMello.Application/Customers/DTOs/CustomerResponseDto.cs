@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DMello.Application.Customers.DTOs
 {
     public class CustomerResponseDto
@@ -8,7 +10,8 @@ namespace DMello.Application.Customers.DTOs
         public string? Email { get; set; }
         public string GstNumber { get; set; } = "No GST Number";
 
-        public string address { get; set; }
+        [Required]
+        public string? address { get; set; }
 
         public string? description { get; set; }
 
