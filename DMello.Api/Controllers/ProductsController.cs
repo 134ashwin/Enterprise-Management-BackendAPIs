@@ -1,5 +1,6 @@
 ﻿using DMello.Application.InventoryProducts;
 using DMello.Application.InventoryProducts.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace DMello.Api.Controllers
     // What problem it solves: Handles HTTP requests, passes query parameters to services, and returns HTTP status responses.
     // How it works: Routes `GET api/products?query=...` requests directly to `IProductService`.
 
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase

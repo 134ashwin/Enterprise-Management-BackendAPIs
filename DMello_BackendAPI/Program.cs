@@ -43,6 +43,7 @@ builder.Services.AddScoped<IInventoryRepository, InventoryProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<ICustomerOrderRepository, CustomerOrderRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 #endregion
 
 // Bind appsettings.json "Jwt" section directly to JwtOptions class
@@ -121,6 +122,8 @@ if (app.Environment.IsDevelopment())
 }
 #endregion
 
+
+
 #region // Run migrations and seeding inside a guarded try-catch block
 
 //Why it exists: Isolates database startup operations (migrations/seeding) inside a scoped try-catch block.
@@ -163,6 +166,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
+
+#region FallBack Prevention- Now we will see data in Json Formate in Network's Response tab
+// 2. Prevent /api requests from returning index.html when an endpoint is missing (Returns 404 JSON instead)
+app.Map("/api/{*path}", (string path) => Results.NotFound(new { message = $"API endpoint '/api/{path}' not found." }));
+
+// 3. Fallback to Angular single-page application for non-API routes only
+app.MapFallbackToFile("index.html");
+#endregion
+
 #region // Automatically apply pending EF Core migrations on application startup
 using (var scope = app.Services.CreateScope())
 {
@@ -179,5 +191,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 #endregion
+
+
 
 app.Run();

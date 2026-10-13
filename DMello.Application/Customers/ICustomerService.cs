@@ -1,14 +1,15 @@
-﻿using DMello.Application.Customers.DTOs;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
+using DMello.Application.Customers.DTOs;
 
 namespace DMello.Application.Customers
 {
     public interface ICustomerService
     {
-        Task<CustomerOrderResponseDto> CreateOrderAsync(CreateCustomerOrderDto dto);
-        Task<IEnumerable<CustomerOrderResponseDto>> GetAllOrdersAsync();
-        Task<CustomerOrderResponseDto?> GetByIdAsync(int id);
+        Task<CustomerResponseDto> CreateCustomerAsync(CustomerCreateDto dto);
+        Task<IEnumerable<CustomerResponseDto>> GetAllCustomersAsync();
+        Task<IEnumerable<CustomerResponseDto>> GetB2BCustomersAsync();
+        Task<IEnumerable<CustomerResponseDto>> GetB2CCustomersAsync();
+        Task<CustomerResponseDto?> GetByIdAsync(int id);
     }
 }

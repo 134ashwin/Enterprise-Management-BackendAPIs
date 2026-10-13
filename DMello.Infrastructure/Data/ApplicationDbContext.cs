@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +26,7 @@ namespace DMello.Infrastructure.Data
         public DbSet<WarehouseLocation> WarehouseLocations { get; set; } = null!;
 
         public DbSet<CustomerModel> CustomerOrders => Set<CustomerModel>();
+        public DbSet<Customer> Customers => Set<Customer>();
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,6 +55,16 @@ namespace DMello.Infrastructure.Data
                 entity.Property(e => e.OrderNo).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.MainSku).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Customer).IsRequired().HasMaxLength(150);
+            });
+
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Name).IsRequired().HasMaxLength(150);
+                entity.Property(c => c.MobileNumber).IsRequired().HasMaxLength(20);
+                entity.Property(c => c.Email).HasMaxLength(150);
+                entity.Property(c => c.GstNumber).HasMaxLength(50);
+                entity.Ignore(c => c.IsB2B);
             });
         }
     }
