@@ -24,17 +24,20 @@ public class SalesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetSalesOrders([FromQuery]SalesOrderFilterDto filter)
+    public async Task<IActionResult> GetSalesOrders([FromQuery] SalesOrderFilterDto filter)
     {
         // 1. Build deferred query without executing SQL yet
         var query = _context.SalesOrders.AsNoTracking().AsQueryable();
 
         // 3. Get total filtered count for pagination calculations
         var totalCount = await query.CountAsync();
+        
 
         // 4. Perform database-level pagination (OFFSET & FETCH NEXT)
         var items = await query
+            .AsNoTracking()
             .OrderByDescending(s => s.OrderDate)
+            .OrderBy(s => s.Customer)
             .Skip((filter.PageNumber - 1) * filter.PageSize)
             .Take(filter.PageSize)
             .Select(s => new SalesOrderResponseDto
