@@ -17,6 +17,7 @@ namespace DMello.Infrastructure.Data
 
         // Add your DbSets here (tables)
         public DbSet<User> Users => Set<User>();
+        public DbSet<ManagedUser> ManagedUsers => Set<ManagedUser>();
         public DbSet<SalesOrdersModel> SalesOrders => Set<SalesOrdersModel>();
 
         #region All Dbsets for Products part containing supplier, Location, SubSku and ProductSku
@@ -65,6 +66,17 @@ namespace DMello.Infrastructure.Data
                 entity.Property(c => c.Email).HasMaxLength(150);
                 entity.Property(c => c.GstNumber).HasMaxLength(50);
                 entity.Ignore(c => c.IsB2B);
+            });
+
+            modelBuilder.Entity<ManagedUser>(entity =>
+            {
+                entity.ToTable("ManagedUsers");
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.FullName).IsRequired().HasMaxLength(150);
+                entity.Property(u => u.MobileNumber).IsRequired().HasMaxLength(20);
+                entity.Property(u => u.Email).IsRequired().HasMaxLength(150);
+                entity.Property(u => u.Role).IsRequired().HasMaxLength(50);
+                entity.Property(u => u.Status).IsRequired().HasMaxLength(20);
             });
         }
     }

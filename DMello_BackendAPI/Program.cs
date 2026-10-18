@@ -4,6 +4,7 @@ using DMello.Application.Common.Options;
 using DMello.Application.Customers;
 using DMello.Application.InventoryProducts;
 using DMello.Application.Suppliers;
+using DMello.Application.Users;
 using DMello.Application.Customers.Services;
 using DMello.Domain.Interfaces;
 using DMello.Infrastructure.Authentication;
@@ -33,14 +34,16 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 
 builder.Services.AddLogging();
 #endregion
 
 #region All Registered Repositories for Db Connections 
 builder.Services.AddScoped<IInventoryRepository, InventoryProductRepository>();
-// 2. UserRepository (Data access layer)
+// 2. UserRepository (Data access layer for Auth)
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IManagedUserRepository, ManagedUserRepository>();
 
 builder.Services.AddScoped<ICustomerOrderRepository, CustomerOrderRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
