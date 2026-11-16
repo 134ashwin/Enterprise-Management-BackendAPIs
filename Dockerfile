@@ -12,7 +12,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
-COPY --from=build /app/publish . 
+COPY --from=build /app/publish .  
 
-# Ensure this matches your compiled output DLL filename exactly
-ENTRYPOINT ["dotnet", "DMello.WebAPI.dll"]
+# Entrypoint matches the project name (DMello.Api.dll)
+ENTRYPOINT ["dotnet", "DMello.Api.dll"]
